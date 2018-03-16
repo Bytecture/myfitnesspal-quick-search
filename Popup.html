@@ -1,0 +1,54 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+  <head>
+    <title>Getting Started Extension's Popup</title>
+    <style type="text/css">
+      body {
+        margin: 10px;
+        white-space: nowrap;
+      }
+
+      h1 {
+        font-size: 15px;
+      }
+
+      #container {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+    -->
+    <script src="Popup.js"></script>
+  </head>
+
+  <body>
+    <h1>Field Edge </h1>
+    <div id="ppi-auto-fill-container">
+      <span>Apply PPI Test Credit Card</span>
+      <select id="ppi-auto-fill-dropdown">
+        <option selected disabled hidden value=''></option>
+        <option value="Amex">Amex</option>
+        <option value="Maestro">Maestro</option>
+        <option value="Maestro2">Maestro2</option>
+        <option value="MasterCard">MasterCard</option>
+        <option value="MasterCard2">MasterCard2</option>
+        <option value="Visa">Visa</option>
+        <option value="Visa2">Visa2</option>
+      </select>
+    </div>
+     <input type="button" value="Apply Clearent Test Card" id="btnClearentTestCard"/>
+    </div>
+  </body>
+</html>
