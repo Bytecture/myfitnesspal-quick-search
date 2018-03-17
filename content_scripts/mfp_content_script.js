@@ -52,92 +52,110 @@
 
 // div.appendChild(dropDown);
 
+setTimeout(function () {
+  var $tbody_r = $('#recent_page_1 > table > tbody');
+  var baseIndex = 100;
+  function copyFrequent($tbody_f) {
+    
+    //var $tbody_f = $(fromPage+' > table > tbody');
+    tbody_f = $tbody_f;
+    var $tableRows = $tbody_f.children();
 
-var $tbody_r = $('#recent_page_1 > table > tbody');
-(function copyFrequent() {
-  var $tbody_f = $('#frequent_page_1 > table > tbody');
+    $($tableRows).each(function (i) {
+      $($tableRows[i]).clone().appendTo($tbody_r);
+    })
 
-  var $tableRows = $tbody_f.children();
+    $('#frequent_tab').hide();
+  }
 
-  $($tableRows).each(function (i) {
-    $($tableRows[i]).clone().appendTo($tbody_r);
-  })
-
-  $('#frequent_tab').hide();
-})();
-
-
-(function quickSearch() {
-
-  var $fields = $('#searchFoodByName')
-
-  var testButton = document.createElement('input');
-  //testButton.appendChild(document.createTextNode("Test"));
-  testButton.class = "button";
-  testButton.value = "test";
-  testButton.type = "button";
-  $($('#main')).prepend($(testButton));
-  $(testButton).on('click', function (e) {
+  function loadFromServer(pageNo) {
+    
+    let base_index = baseIndex+=25;
     $.ajax({
       type: 'POST',
       url: 'load_recent',
-      data: { meal: 1, base_index: 125, page: 2 },
+      data: { meal: 1, base_index: base_index, page: pageNo },
       dataType: 'html',
-      beforeSend: function(request){
-        request.setRequestHeader( "X-CSRF-Token",$("#input_auth").val());
-        request.setRequestHeader( "X-NewRelic-ID", $("#input_xpid").val());
+      beforeSend: function (request) {
+        request.setRequestHeader("X-CSRF-Token", $("#input_auth").val());
+        request.setRequestHeader("X-NewRelic-ID", $("#input_xpid").val());
       },
       success: function (r) {
-        debugger;
-        //console.log(r);
+        
+
+        copyFrequent($($.parseHTML(r)).find('tbody'));
       },
       always: function (r) {
         debugger;
       }
     });
-  });
-
-  var input = document.createElement("input");
-  input.type = "text";
-  input.id = 'dynamic_search';
-  $($fields).append(input);
-  input.placeholder = "Quick Search";
-  input.onkeyup = function (e) {
-    let inputValue = input.value.toLowerCase();
-
-    var $rows = $($tbody_r).children();
-    $($rows).each(function (i) {
-      let row = $($rows[i]).html();
-      let hide = inputValue != '' && (row.toLowerCase().indexOf(inputValue) === -1);
-      $($rows[i]).css('visibility', hide ? 'hidden' : 'visible');
-    });
   }
 
-})();
-
-$( document ).ajaxSuccess(function( event, request, settings ) {
-	console.log(request.status);
-});
-
-$( document ).ajaxError(function( event, request, settings ) {
-	console.log(request.status);
-});
-
-var input_auth = document.createElement("input");
-var input_xpid = document.createElement("input");
-input_auth.setAttribute("type", "hidden");
-input_xpid.setAttribute("type", "hidden");
+  copyFrequent($('#frequent_page_1 > table > tbody'));
 
 
-input_auth.id = "input_auth";
-input_xpid.id = "input_xpid";
+  (function quickSearch() {
 
-document.getElementById("main").appendChild(input_auth);
-document.getElementById("main").appendChild(input_xpid);
+    var $fields = $('#searchFoodByName')
+
+    var testButton = document.createElement('input');
+    //testButton.appendChild(document.createTextNode("Test"));
+    testButton.class = "button";
+    testButton.value = "test";
+    testButton.type = "button";
+    $($('#main')).prepend($(testButton));
+    $(testButton).on('click', function (e) {
+      loadFromServer(2);
+      loadFromServer(3)
+      loadFromServer(4)
+
+    });
+
+    var input = document.createElement("input");
+    input.type = "text";
+    input.id = 'dynamic_search';
+    $($fields).append(input);
+    input.placeholder = "Quick Search";
+    input.onkeyup = function (e) {
+      let inputValue = input.value.toLowerCase();
+
+      var $rows = $($tbody_r).children();
+      $($rows).each(function (i) {
+        let row = $($rows[i]).html();
+        let hide = inputValue != '' && (row.toLowerCase().indexOf(inputValue) === -1);
+        if(hide){
+           $($rows[i]).hide();
+        }
+        else
+        {
+           $($rows[i]).show();
+        }
+        //$($rows[i]).css('visibility', hide ? 'hidden' : 'visible');
+      });
+    }
+
+  })();
+
+  (function copyTokens() {
 
 
-$(document).ready(function(){
-    var myScript = document.createElement("script");
-    myScript.innerHTML = '$("#input_xpid").val(window.NREUM.loader_config.xpid); $("#input_auth").val(window.AUTH_TOKEN);';
-    document.body.appendChild(myScript);
-});
+    $(document).ready(function () {
+      var input_auth = document.createElement("input");
+      var input_xpid = document.createElement("input");
+      input_auth.setAttribute("type", "hidden");
+      input_xpid.setAttribute("type", "hidden");
+
+
+      input_auth.id = "input_auth";
+      input_xpid.id = "input_xpid";
+
+      document.getElementById("main").appendChild(input_auth);
+      document.getElementById("main").appendChild(input_xpid);
+
+
+      var myScript = document.createElement("script");
+      myScript.innerHTML = '$("#input_xpid").val(window.NREUM.loader_config.xpid); $("#input_auth").val(window.AUTH_TOKEN);';
+      document.body.appendChild(myScript);
+    });
+  })();
+}, 3000);
