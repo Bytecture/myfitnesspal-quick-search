@@ -15,14 +15,14 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.myfitnesspal.com/*",
-        "http://www.myfitnesspal.com/*",
-        "https://myfitnesspal.com/*"
+        "https://www.myfitnesspal.com/*/add*",
+        "http://www.myfitnesspal.com/*/add*",
+        "https://myfitnesspal.com/*/add*"
       ],
       // "css": ["mystyles.css"],
       "js": [
         "/lib/jquery-3.3.1.min.js",
-        "/content_scripts/mfp_content_script.js"
+        "/content_scripts/mfp_content_script.min.js"
       ]
     }    
   ],

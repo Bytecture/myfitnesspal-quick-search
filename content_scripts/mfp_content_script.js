@@ -1,138 +1,140 @@
-// const cardDataSet = {
-//   "Select Card": ['', '', '', '', '', ''],
-//   "Amex": ['341111597241002', '', '111', '27 Broadway', 'New York', '10004-1601'],
-//   "Maestro": ['6761000000000006', '123456', '676', '6 Maestro Street', 'Exeter', 'EX16 7EF'],
-//   "Maestro2": ['6333000023456788', '', '888', '1 Bd Victor, Paris', 'France', '75015'],
-//   "MasterCard": ['5761000000000008', '123456', '576', '8 MasterCard Street', 'Highbridge', 'TA6 4GA'],
-//   "MasterCard2": ['5301250070000191', '', '999', '76 Whiteladies Road', 'Clifton', 'BS8 2NT'],
-//   "Visa": ['4761000000000001', '123456', '476', '1 Visa Street', 'Crewe', 'CW4 7NT'],
-//   "Visa2": ['4111111111111111', '', '111', '28 Bishopgate Street', 'Sedgeford', 'PE36 4AW'],
 
-// };
+$(document).ready(function () {
 
-// chrome.extension.onRequest.addListener(setCardValue);
+  $('.tabbed').hide();
+  $('#search').focus();
+});
 
-// function setCardValue(request, sender) {
-//   console.log('setcardvalue');
-
-//   const cardData = cardDataSet[request];
-//   var ekashu_card_number = document.getElementById("ekashu_card_number").value = cardData[0];
-//   var ekashu_card_number = document.getElementById("ekashu_input_expires_end_month").value = "07";
-//   var ekashu_card_number = document.getElementById("ekashu_input_expires_end_year").value = "2022";
-//   var ekashu_card_number = document.getElementById("ekashu_verification_value").value = cardData[2];
-//   var ekashu_card_number = document.getElementById("ekashu_card_first_name").value = "FirstName"
-//   var ekashu_card_number = document.getElementById("ekashu_card_last_name").value = "LastName"
-//   var ekashu_card_number = document.getElementById("ekashu_card_address_1").value = cardData[3];
-//   var ekashu_card_number = document.getElementById("ekashu_card_city").value = cardData[4];
-//   var ekashu_card_number = document.getElementById("ekashu_card_zip_code").value = cardData[5];
-
-// }
-
-// function setCardData(cardData){
-
-// }
-
-// var div = document.getElementById("ekashu_content");
-// let dropDown = document.createElement("select");
-// $.each(cardDataSet, function (index, value) {
-//   var op = new Option();
-//   op.value = index;
-//   op.text = index;
-//   dropDown.options.add(op);
-//   // var t = document.createTextNode("CLICK ME");       // Create a text node
-//   // var button = document.createElement("button");
-//   // button.appendChild(t);       
-//   // div.appendChild(button);
-
-// });
-
-// dropDown.addEventListener('change', (e) => {
-//   setCardValue(dropDown.value);
-// });
-
-// div.appendChild(dropDown);
-
+  console.log('here');
 setTimeout(function () {
-  var $tbody_r = $('#recent_page_1 > table > tbody');
-  var baseIndex = 100;
-  function copyFrequent($tbody_f) {
-    
-    //var $tbody_f = $(fromPage+' > table > tbody');
+  $('div.pagination').hide();
+  $('.table-footer').hide();
+  let $tbody_r = $('#recent_page_1 > table > tbody');
+  let baseIndex = 100;
+  let external_ids = [];
+
+  let searchInput = $('#search');
+
+  function copyFromExistingTable($tbody_f, logIdOnly) {
+
+
     tbody_f = $tbody_f;
-    var $tableRows = $tbody_f.children();
+    let $tableRows = $tbody_f.children('tr');
 
     $($tableRows).each(function (i) {
-      $($tableRows[i]).clone().appendTo($tbody_r);
-    })
+      let rowToCopy = $($tableRows[i]);
 
-    $('#frequent_tab').hide();
-  }
-
-  function loadFromServer(pageNo) {
-    
-    let base_index = baseIndex+=25;
-    $.ajax({
-      type: 'POST',
-      url: 'load_recent',
-      data: { meal: 1, base_index: base_index, page: pageNo },
-      dataType: 'html',
-      beforeSend: function (request) {
-        request.setRequestHeader("X-CSRF-Token", $("#input_auth").val());
-        request.setRequestHeader("X-NewRelic-ID", $("#input_xpid").val());
-      },
-      success: function (r) {
-        
-
-        copyFrequent($($.parseHTML(r)).find('tbody'));
-      },
-      always: function (r) {
-        debugger;
+      if (rowToCopy.find('td.no_results').length == 0) {
+        var newExternalId = rowToCopy.find('input.checkbox').attr('data-food-external-id');
+        //only built in foods have external ids.  Meals and recipes do not have external id
+        if (!newExternalId || external_ids.indexOf(newExternalId) == -1) {
+          external_ids.push(newExternalId);
+          if (!logIdOnly) {
+            rowToCopy.clone().appendTo($tbody_r);
+          }
+          else {
+            console.log('skipping');
+          }
+        }
       }
     });
   }
 
-  copyFrequent($('#frequent_page_1 > table > tbody'));
+
+  copyFromExistingTable($('#recent_page_1 > table > tbody'), true);
+  copyFromExistingTable($('#frequent_page_1 > table > tbody'));
+  searchInput.on('change paste keyup', doQuickSearch);
 
 
-  (function quickSearch() {
 
-    var $fields = $('#searchFoodByName')
+  function doQuickSearch(e) {
+    let inputValue = searchInput.val().toLowerCase();
+    var $rows = $($tbody_r).children();
+    $($rows).each(function (i) {
+      let row = $($rows[i]).html();
+      let hide = inputValue != '' && (row.toLowerCase().indexOf(inputValue) === -1);
 
-    var testButton = document.createElement('input');
-    //testButton.appendChild(document.createTextNode("Test"));
-    testButton.class = "button";
-    testButton.value = "test";
-    testButton.type = "button";
-    $($('#main')).prepend($(testButton));
-    $(testButton).on('click', function (e) {
-      loadFromServer(2);
-      loadFromServer(3)
-      loadFromServer(4)
+      if (hide) {
+        $($rows[i]).hide();
+      }
+      else {
+        $($rows[i]).show();
+      }
 
     });
+  }
 
-    var input = document.createElement("input");
-    input.type = "text";
-    input.id = 'dynamic_search';
-    $($fields).append(input);
-    input.placeholder = "Quick Search";
-    input.onkeyup = function (e) {
-      let inputValue = input.value.toLowerCase();
+  var LOAD_TYPES = {
+    RECENT: "/food/load_recent",
+    MY_FOODS: "/food/load_my_foods",
+    MEALS: "/food/load_meals",
+    RECIPES: "/food/load_recipes"
+  };
 
-      var $rows = $($tbody_r).children();
-      $($rows).each(function (i) {
-        let row = $($rows[i]).html();
-        let hide = inputValue != '' && (row.toLowerCase().indexOf(inputValue) === -1);
-        if(hide){
-           $($rows[i]).hide();
+  function loadFromServer(pageNo, fromWhere) {
+
+
+    var deferred = new $.Deferred();
+    setTimeout(function () {
+
+      function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+      }
+
+      let mealNo = getParameterByName('meal');
+      let base_index = baseIndex += 25;
+      $.ajax({
+        type: 'POST',
+        url: fromWhere,
+        data: { meal: mealNo, base_index: base_index, page: pageNo },
+        dataType: 'html',
+        beforeSend: function (request) {
+          request.setRequestHeader("X-CSRF-Token", $("#input_auth").val());
+          request.setRequestHeader("X-NewRelic-ID", $("#input_xpid").val());
+        },
+        success: function (r) {
+
+
+          copyFromExistingTable($($.parseHTML(r)).find('tbody'));
+          console.log({ logged_from_server: pageNo });
+          doQuickSearch();
+          deferred.resolve();
+        },
+        always: function (r) {
+          debugger;
         }
-        else
-        {
-           $($rows[i]).show();
-        }
-        //$($rows[i]).css('visibility', hide ? 'hidden' : 'visible');
       });
-    }
+    }, 500);
+    return deferred.promise();
+  }
+
+
+
+  (function setupQuickSearch() {
+    // var $fields = $('#searchFoodByName')
+
+    // var testButton = document.createElement('input');
+    // //testButton.appendChild(document.createTextNode("Test"));
+    // testButton.class = "button";
+    // testButton.value = "test";
+    // testButton.type = "button";
+    // $($('#main')).prepend($(testButton));
+    // $(testButton).on('click', function (e) {
+
+    // });
+    //$('#search').hide();
+    // var input = document.createElement("input");
+    // input.type = "text";
+    // input.id = 'dynamic_search';
+    // $($fields).append(input);
+    // input.placeholder = "Quick Search";
+
 
   })();
 
@@ -158,4 +160,19 @@ setTimeout(function () {
       document.body.appendChild(myScript);
     });
   })();
+
+
+  loadFromServer(2, LOAD_TYPES.RECENT).then(function () {
+    loadFromServer(3, LOAD_TYPES.RECENT).then(function () {
+      loadFromServer(4, LOAD_TYPES.RECENT).then(function () {
+        loadFromServer(1, LOAD_TYPES.MY_FOODS).then(function () {
+          loadFromServer(1, LOAD_TYPES.MEALS).then(function () {
+            loadFromServer(1, LOAD_TYPES.RECIPES).then(function () {
+            });
+          });
+        });
+      });
+    });
+  });
+
 }, 3000);

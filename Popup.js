@@ -30,19 +30,7 @@ function getCurrentTabUrl(callback) {
     
     var url = new URL(tab.url)
     var domain = url.hostname
-    if(domain != "test.ekashu.com"){
-      const ppiAutoFill = document.getElementById('ppi-auto-fill-container');
-      ppiAutoFill.style.display = 'none';
-    }
-
-    // tab.url is only available if the "activeTab" permission is declared.
-    // If you want to see the URL of other tabs (e.g. after removing active:true
-    // from |queryInfo|), then the "tabs" permission is required to see their
-    // "url" properties.
-    // console.assert(typeof url == 'string', 'tab.url should be a string');
-
-    callback(tab.url);
-  });
+    
 
   // Most methods of the Chrome extension APIs are asynchronous. This means that
   // you CANNOT do something like this:
@@ -59,24 +47,7 @@ function getCurrentTabUrl(callback) {
  *
  * @param {string} color The new background color.
  */
-function changeCard(cardType) {
 
-//  chrome.tabs.getSelected(null, function(tab) {
-   
-//     chrome.tabs.sendRequest(tab.id, {cardData: "Amex"}, function(response) {
-       
-//     });
-//    });
-  //var script = 'document.body.style.backgroundColor="' + color + '";';
-  // See https://developer.chrome.com/extensions/tabs#method-executeScript.
-  // chrome.tabs.executeScript allows us to programmatically inject JavaScript
-  // into a page. Since we omit the optional first argument "tabId", the script
-  // is inserted into the active tab of the current window, which serves as the
-  // default.
-  // chrome.tabs.executeScript({
-  //   code: script
-  // });
-}
 
 /**
  * Gets the saved background color for url.
