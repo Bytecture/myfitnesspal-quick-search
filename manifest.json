@@ -1,8 +1,11 @@
 {
   "manifest_version": 2,
-  "name": "MyFitnessPal Search",
+  "name": "MyFitnessPal Quick Search",
   "description": "Tools to help with MyFitnessPal Search.",
   "version": "1.0",
+  "icons": { "16": "icon.png",
+           "48": "icon.png",
+          "128": "icon.png" },
   "background": {
     "scripts": [
       "/lib/hot-reload.js"
@@ -18,8 +21,7 @@
         "https://www.myfitnesspal.com/*/add*",
         "http://www.myfitnesspal.com/*/add*",
         "https://myfitnesspal.com/*/add*"
-      ],
-      // "css": ["mystyles.css"],
+      ],      
       "js": [
         "/lib/jquery-3.3.1.min.js",
         "/content_scripts/mfp_content_script.min.js"
