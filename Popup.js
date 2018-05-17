@@ -28,8 +28,8 @@ function getCurrentTabUrl(callback) {
     // A tab is a plain object that provides information about the tab.
     // See https://developer.chrome.com/extensions/tabs#type-Tab
     
-    var url = new URL(tab.url)
-    var domain = url.hostname
+    var url = new URL(tab.url);
+    var domain = url.hostname;
     
 
   // Most methods of the Chrome extension APIs are asynchronous. This means that
@@ -40,8 +40,8 @@ function getCurrentTabUrl(callback) {
   //   url = tabs[0].url;
   // });
   // alert(url); // Shows "undefined", because chrome.tabs.query is async.
-}
-
+});
+};
 /**
  * Change the background color of the current page.
  *
