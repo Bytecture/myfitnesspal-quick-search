@@ -1,11 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "MyFitnessPal Quick Search",
+  "name": "MyFitnessPal Search",
   "description": "Tools to help with MyFitnessPal Search.",
   "version": "1.0",
-  "icons": { "16": "icon.png",
-           "48": "icon.png",
-          "128": "icon.png" },
   "background": {
     "scripts": [
       "/lib/hot-reload.js"
@@ -18,14 +15,36 @@
   "content_scripts": [
     {
       "matches": [
+        "https://www.myfitnesspal.com/*",
+        "http://www.myfitnesspal.com/*",
+        "https://myfitnesspal.com/*"
+      ],
+      // "css": ["mystyles.css"],
+      "js": [
+        "/lib/jquery-3.3.1.min.js",
+        "/content_scripts/mfp_content_script.js"
+              ]
+    },
+    {
+      "matches": [
         "https://www.myfitnesspal.com/*/add*",
         "http://www.myfitnesspal.com/*/add*",
         "https://myfitnesspal.com/*/add*"
-      ],      
+      ],
       "js": [
-        "/lib/jquery-3.3.1.min.js",
-        "/content_scripts/mfp_content_script.min.js"
+        "/content_scripts/mfp_content_search_filter.js"
+        //"/content_scripts/mfp_content_script.min.js"
       ]
+    },
+    {
+      "matches": [
+        
+        "https://www.myfitnesspal.com/food/search*",
+        "http://www.myfitnesspal.com/food/search*",
+        "https://myfitnesspal.com/food/search*"
+      ],
+      "js":[
+        "/content_scripts/mfp_content_search_preview.js"]
     }    
   ],
   "permissions": [
