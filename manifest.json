@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "MyFitnessPal Search",
   "description": "Tools to help with MyFitnessPal Search.",
-  "version": "1.0",
+  "version": "1.1",
   "background": {
     "scripts": [
       "/lib/hot-reload.js"
@@ -19,11 +19,10 @@
         "http://www.myfitnesspal.com/*",
         "https://myfitnesspal.com/*"
       ],
-      // "css": ["mystyles.css"],
       "js": [
         "/lib/jquery-3.3.1.min.js",
         "/content_scripts/mfp_content_script.js"
-              ]
+      ]
     },
     {
       "matches": [
@@ -33,19 +32,18 @@
       ],
       "js": [
         "/content_scripts/mfp_content_search_filter.js"
-        //"/content_scripts/mfp_content_script.min.js"
       ]
     },
     {
       "matches": [
-        
         "https://www.myfitnesspal.com/food/search*",
         "http://www.myfitnesspal.com/food/search*",
         "https://myfitnesspal.com/food/search*"
       ],
-      "js":[
-        "/content_scripts/mfp_content_search_preview.js"]
-    }    
+      "js": [
+        "/content_scripts/mfp_content_search_preview.js"
+      ]
+    }
   ],
   "permissions": [
     "activeTab",
