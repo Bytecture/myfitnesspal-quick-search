@@ -114,30 +114,6 @@ setTimeout(function () {
     return deferred.promise();
   }
 
-
-
-  (function setupQuickSearch() {
-    // var $fields = $('#searchFoodByName')
-
-    // var testButton = document.createElement('input');
-    // //testButton.appendChild(document.createTextNode("Test"));
-    // testButton.class = "button";
-    // testButton.value = "test";
-    // testButton.type = "button";
-    // $($('#main')).prepend($(testButton));
-    // $(testButton).on('click', function (e) {
-
-    // });
-    //$('#search').hide();
-    // var input = document.createElement("input");
-    // input.type = "text";
-    // input.id = 'dynamic_search';
-    // $($fields).append(input);
-    // input.placeholder = "Quick Search";
-
-
-  })();
-
   loadFromServer(2, LOAD_TYPES.RECENT).then(function () {
     loadFromServer(3, LOAD_TYPES.RECENT).then(function () {
       loadFromServer(4, LOAD_TYPES.RECENT).then(function () {

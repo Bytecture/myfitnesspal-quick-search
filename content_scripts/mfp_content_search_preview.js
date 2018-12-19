@@ -1,25 +1,76 @@
 
-var observer = new MutationObserver(fnHandler),
-        elTarget = document.getElementById('loaded_item'),
-        objConfig = {
-            childList: true,
-            subtree : true,
-            attributes: false, 
-            characterData : false
-        };
-
-//then actually do some observing
-observer.observe(elTarget, objConfig);
-
-function fnHandler () {
-    alert("DETECTED_VARIATION");
-}
+// $('div.nutritional_info > a').on('click', function(){
+//     console.log('a');
+// });
 
 
+$('li.matched-food').on('click', function () {
+    console.log('changed');
+
+    setTimeout(function () {
+        debugger;
+        var food_entry_qty = $("#content-block #food_entry_quantity").val(),
+            food_entry_weight = $("#content-block #food_entry_weight_id").val(),
+            food_entry_serving_size = {
+                item: {
+                    serving_sizes: []
+                }
+            },
+            food_entry_weight_option = $("#food_entry_weight_id option");
+        $.each(food_entry_weight_option, function (serving_size_info, d) {
+            d = $(d);
+            var valueAndUnits = $(d).html().split(" ")
+            
+            serving_size_info = {
+                //value: d.data("value"),
+                //unit: d.data("unit"),
+                value: valueAndUnits[0],
+                unit: valueAndUnits[1],
+                nutrition_multiplier: d.data("nutrition-multiplier"),
+                selected: serving_size_info === food_entry_weight
+            };
+            food_entry_serving_size.item.serving_sizes.push(serving_size_info)
+        });
+        food_entry_weight_option = food_entry_serving_size.item.serving_sizes[food_entry_weight];
+        food_entry_weight_option.selected = !0;
+        $("#content-block #update_servings").data("external-id");
+        var e = $("#content-block #update_servings").data("version-id");
+        $.ajax({
+            url: "nutritional_info_v2",
+            type: "post",
+            data: {
+                obfuscated_food_id: e,
+                food_entry_quantity: food_entry_qty,
+                serving_sizes: food_entry_serving_size,
+                selected_value: food_entry_weight_option.value,
+                selected_unit: food_entry_weight_option.unit,
+                selected_nutritional_multiplier: food_entry_weight_option.nutrition_multiplier
+            },
+            beforeSend: function (request) {
+                request.setRequestHeader("X-CSRF-Token", $("#input_auth").val());
+                request.setRequestHeader("X-NewRelic-ID", $("#input_xpid").val());
+            },
+            success: function (resultHtml) {
+                document.getElementById("create-item").innerHTML = resultHtml;
+                
+            },
+            error: function (a, b, c) {
+                console.log([a, b, c])
+            }
+        })
+    }, 3000);
+    
+    return true;
+});
+
+$('#food-nutritional-details-form').on('submit', function(){
+    console.log('here');
+    return true;
+})
 
 
 // $('.matched-food').on('click', function(){
- 
+
 //  let  link = $(this)[0].getElementsByTagName('div')[0].getElementsByTagName('a')[0];
 //  console.log(link);
 // var loadedItem = document.getElementById('loaded_item');
