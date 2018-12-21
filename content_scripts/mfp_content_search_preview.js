@@ -30,7 +30,9 @@ var callback = function (mutationsList, observer) {
                     let protienGrams = nutritionTableArray[5][3].replace(/\D/g, '');
 
                     const macroCalories = protienGrams * 4 + carbGrams * 4 + fatGrams * 9;
-                    if (protienGrams * 4 + carbGrams * 4 + fatGrams * 9 != calories) {
+                    const macroCaloriesMax = macroCalories + macroCalories * 0.05;
+                    const macroCaloriesMin= macroCalories - macroCalories * 0.05;
+                    if (calories> macroCaloriesMax || calories < macroCaloriesMin ) {
                         //document.getElementById('nutrition-facts').style.color = 'red';
                         nutritialTable[0].style.color = 'red';//this line is needed or it seems to hang.
                         $(nutritialTable).prepend("<div>Macro calories: " + macroCalories.toString() + "</div>")
