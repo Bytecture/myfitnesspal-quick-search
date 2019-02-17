@@ -27,9 +27,9 @@ var callback = function (mutationsList, observer) {
                     let calories = nutritionTableArray[0][1];
                     let fatGrams = nutritionTableArray[1][1].replace(/\D/g, '');
                     let carbGrams = nutritionTableArray[2][3].replace(/\D/g, '');
-                    let protienGrams = nutritionTableArray[5][3].replace(/\D/g, '');
+                    let proteinGrams = nutritionTableArray[5][3].replace(/\D/g, '');
 
-                    const macroCalories = protienGrams * 4 + carbGrams * 4 + fatGrams * 9;
+                    const macroCalories = proteinGrams * 4 + carbGrams * 4 + fatGrams * 9;
                     const macroCaloriesMax = macroCalories + macroCalories * 0.05;
                     const macroCaloriesMin = macroCalories - macroCalories * 0.05;
                     if (calories > macroCaloriesMax || calories < macroCaloriesMin) {
