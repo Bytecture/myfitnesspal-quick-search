@@ -28,7 +28,7 @@ function getCurrentTabUrl(callback) {
     // A tab is a plain object that provides information about the tab.
     // See https://developer.chrome.com/extensions/tabs#type-Tab
 
-   
+
 
     // tab.url is only available if the "activeTab" permission is declared.
     // If you want to see the URL of other tabs (e.g. after removing active:true
@@ -38,15 +38,6 @@ function getCurrentTabUrl(callback) {
 
     callback(tab.url);
   });
-
-  // Most methods of the Chrome extension APIs are asynchronous. This means that
-  // you CANNOT do something like this:
-  //
-  // var url;
-  // chrome.tabs.query(queryInfo, (tabs) => {
-  //   url = tabs[0].url;
-  // });
-  // alert(url); // Shows "undefined", because chrome.tabs.query is async.
 }
 
 
@@ -64,8 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.tabs.create({ url: link.getAttribute('href') });
 
       });
-
-      //saveBackgroundColor(url, dropdown.value);
     });
 
   });
