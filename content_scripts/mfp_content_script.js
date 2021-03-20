@@ -15,9 +15,11 @@ setTimeout(function () {
       input_auth.id = "input_auth";
       input_xpid.id = "input_xpid";
 
-      document.getElementById("main").appendChild(input_auth);
-      document.getElementById("main").appendChild(input_xpid);
-
+      var main = document.getElementById("main")
+      if (!!main) {
+        main.appendChild(input_auth);
+        main.appendChild(input_xpid);
+      }
 
       var myScript = document.createElement("script");
       myScript.innerHTML = '$("#input_xpid").val(window.NREUM.loader_config.xpid); $("#input_auth").val(window.AUTH_TOKEN);';

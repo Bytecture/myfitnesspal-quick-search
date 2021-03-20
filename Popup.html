@@ -5,41 +5,44 @@
  value "popup.html".
  -->
 <html>
-  <head>
-    <title>Getting Started Extension's Popup</title>
-    <style type="text/css">
-      body {
-        margin: 10px;
-      }
 
-      h1 {
-        font-size: 15px;
-      }
+<head>
+  <title>Getting Started Extension's Popup</title>
+  <style type="text/css">
+    body {
+      margin: 10px;
+    }
 
-      #container {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
-      }
-    </style>
+    h1 {
+      font-size: 15px;
+    }
 
-    <!--
+    #container {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+
+  <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
     -->
-    <script src="Popup.js"></script>
-    <script src="lib/jquery-3.3.1.min.js"></script>
-  </head>
+  <script src="Popup.js"></script>
+  <script src="lib/jquery-3.3.1.js"></script>
+</head>
 
-  <body>
-    <div style="width:400px; "> 
-      This tool will make searching recent/frequent foods faster.  It will preload the foods for you instead of loading by page.  You can filter through each food by entering the food in the search box.
-      <br/>
-      By <a id="myLink" href="http://bytecture.com">Bytecture.com</a>
-    </div>
+<body>
+  <div style="width:400px; ">
+    This tool will make searching recent/frequent foods faster. It will preload the foods for you instead of loading by
+    page. You can filter through each food by entering the food in the search box.
+    <br />
+    By <a id="myLink" href="http://bytecture.com">Bytecture.com</a>
+  </div>
 
-   
-  </body>
+
+</body>
+
 </html>
